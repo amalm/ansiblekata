@@ -1,6 +1,6 @@
 # Ansible Kata
 
-## Docker
+## Set up Ansible using Docker
 In the Kata we will use two Docker containers based on the image [solita/ansible-ssh](https://hub.docker.com/r/solita/ansible-ssh).
 
 The image is pre-installed with [Ansible](https://docs.ansible.com/) and a SSH server.
@@ -61,8 +61,84 @@ katabox | SUCCESS => {
 **We are good to go!**
 
 ## Ansible Hello World
+There is a playbook prepared in the <code>ansibles</code> folder: <code>helloworld.yaml</code>.
 
+<code>
+ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook helloworld.yaml
 
+PLAY [Echo] ********************************************************************
+
+TASK [setup] *******************************************************************
+ok: [katabox]
+
+TASK [Print debug message] *****************************************************
+ok: [katabox] => {
+    "msg": "Hello, world!"
+}
+
+PLAY RECAP *********************************************************************
+katabox                    : ok=2    changed=0    unreachable=0    failed=0
+</code>
+
+## Ansible Put a file on a provisioned server
+<code>
+ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook filetemplate.yaml
+
+PLAY [Template Play] ***********************************************************
+
+TASK [setup] *******************************************************************
+ok: [katabox]
+
+TASK [Put a file on the provisioned environment] *******************************
+changed: [katabox]
+
+PLAY RECAP *********************************************************************
+katabox                    : ok=2    changed=1    unreachable=0    failed=0
+</code>
+
+You can check that the file is actually there:
+
+<code>>
+C:\Workspaces\git\katas\ansiblekata>docker-compose exec katabox bash
+root@57e755f32680:/# su -l ansible
+ansible@57e755f32680:~$ cat file.conf
+Hi there!ansible
+</code>
+
+## A peak at reusable structures
+One Best Practice is to use *roles*. See the playbook <code>filetemplate_with_role.yaml</code>.
+
+The code is really compact, the actually code is in <code>ansibles\roles\common\tasks\main.yaml</code>.
+
+Try it out:
+
+<code>
+ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook filetemplate.yaml
+
+PLAY [Template Play] ***********************************************************
+
+TASK [setup] *******************************************************************
+ok: [katabox]
+
+TASK [Put a file on the provisioned environment] *******************************
+changed: [katabox]
+
+PLAY RECAP *********************************************************************
+katabox                    : ok=2    changed=1    unreachable=0    failed=0
+
+ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook filetemplate_with_role.yaml
+
+PLAY [Template Play] ***********************************************************
+
+TASK [setup] *******************************************************************
+ok: [katabox]
+
+TASK [common : Put a file on the provisioned environment] **********************
+ok: [katabox]
+
+PLAY RECAP *********************************************************************
+katabox                    : ok=2    changed=0    unreachable=0    failed=0
+</code>
 
 ## FAQ
 ### I get an error like <code>ECDSA host key for katabox has changed</code>
