@@ -1,0 +1,7 @@
+  - name: Put a file on the provisioned environment
+    copy:
+      src: templates/file.txt
+      dest: /home/ansible/file.conf
+      owner: ansible
+      group: ansible
+      mode: '0644'

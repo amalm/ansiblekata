@@ -1,0 +1,40 @@
+services:
+  ansible:
+    image: solita/ansible-ssh
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - type: bind
+        source: etc/ansible
+        target: /etc/ansible
+      - type: bind
+        source: .ssh
+        target: /home/ansible/.ssh
+      - type: bind
+        source: .ansible.cfg
+        target: /home/ansible/.ansible.cfg
+      - type: bind
+        source: ansibles
+        target: /home/ansible/ansibles
+    ports:
+      - 2222:22
+      
+    links:
+      - katabox
+    stdin_open: true 
+    tty: true      
+
+  katabox:
+    image: solita/ansible-ssh
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - type: bind
+        source: .ssh
+        target: /home/ansible/.ssh
+    ports:
+      - 2223:22
+    stdin_open: true 
+    tty: true      

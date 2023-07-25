@@ -1,0 +1,5 @@
+# simple ansible inventory
+
+[KataHosts]
+katabox # docker container in same network
+

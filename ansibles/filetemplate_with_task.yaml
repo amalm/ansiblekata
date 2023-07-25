@@ -1,0 +1,7 @@
+- name: Template Play
+  gather_facts: true
+  hosts: KataHosts
+
+  roles:
+    - common
+
