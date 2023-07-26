@@ -5,6 +5,9 @@ In the Kata we will use two Docker containers based on the image [solita/ansible
 
 The image is pre-installed with [Ansible](https://docs.ansible.com/) and a SSH server.
 
+### Build the Docker image *katabox* to use as a provisioning target
+<code>docker build . -tkatabox:latest</code>
+
 Start the containers using <code>docker-compose up</code>.
 
 Two containers are started:
@@ -61,10 +64,10 @@ katabox | SUCCESS => {
 **We are good to go!**
 
 ## Ansible Hello World
-There is a playbook prepared in the <code>ansibles</code> folder: <code>helloworld.yaml</code>.
+There is a playbook prepared in the <code>ansibles</code> folder: <code>helloworldplaybook.yaml</code>.
 
 <code>
-ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook helloworld.yaml
+ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook helloworldplaybook.yaml
 
 PLAY [Echo] ********************************************************************
 
@@ -82,7 +85,7 @@ katabox                    : ok=2    changed=0    unreachable=0    failed=0
 
 ## Ansible Put a file on a provisioned server
 <code>
-ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook filetemplate.yaml
+ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook fileplaybook.yaml
 
 PLAY [Template Play] ***********************************************************
 
@@ -106,27 +109,14 @@ Hi there!ansible
 </code>
 
 ## A peak at reusable structures
-One Best Practice is to use *roles*. See the playbook <code>filetemplate_with_role.yaml</code>.
+One Best Practice is to use *roles*. See the playbook <code>fileroleplaybook.yaml</code>.
 
 The code is really compact, the actually code is in <code>ansibles\roles\common\tasks\main.yaml</code>.
 
 Try it out:
 
 <code>
-ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook filetemplate.yaml
-
-PLAY [Template Play] ***********************************************************
-
-TASK [setup] *******************************************************************
-ok: [katabox]
-
-TASK [Put a file on the provisioned environment] *******************************
-changed: [katabox]
-
-PLAY RECAP *********************************************************************
-katabox                    : ok=2    changed=1    unreachable=0    failed=0
-
-ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook filetemplate_with_role.yaml
+ansible@6e1a7eb1db17:~/ansibles$ ansible-playbook fileroleplaybook.yaml
 
 PLAY [Template Play] ***********************************************************
 
@@ -138,6 +128,31 @@ ok: [katabox]
 
 PLAY RECAP *********************************************************************
 katabox                    : ok=2    changed=0    unreachable=0    failed=0
+</code>
+
+## Install NodeJS
+<code>ansible-playbook nodejsplaybook.yaml</code>
+
+### Install a NodeJS file
+A JS file like below would start a NodeJS server on the *katabox*.
+Add a *role* *webserver* with that snippet to be installed and started.
+Verify by opening *http://localhost:3000* in a browser on your local machine.
+
+<code>
+const http = require('http');
+
+const hostname = 'katabox';
+const port = 3000;
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World');
+});
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
 </code>
 
 ## FAQ

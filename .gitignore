@@ -1,2 +1,4 @@
 known_hosts*
 *.retry
+webserverplaybook.yaml
+**/webserver

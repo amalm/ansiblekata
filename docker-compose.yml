@@ -26,7 +26,7 @@ services:
     tty: true      
 
   katabox:
-    image: solita/ansible-ssh
+    image: katabox
     privileged: true
     security_opt:
       - seccomp:unconfined
@@ -35,6 +35,6 @@ services:
         source: .ssh
         target: /home/ansible/.ssh
     ports:
-      - 2223:22
+      - 3000:3000
     stdin_open: true 
     tty: true      
