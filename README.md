@@ -188,6 +188,17 @@ Add correct host key in /home/ansible/.ssh/known_hosts to get rid of this messag
 Offending ECDSA key in /home/ansible/.ssh/known_hosts:5
   remove with:
   ssh-keygen -f "/home/ansible/.ssh/known_hosts" -R katabox
+  
+  
 ECDSA host key for katabox has changed and you have requested strict checking.
 Host key verification failed.
+</code>
+
+### I get an error like <code>Failed to mount cgroup at /sys/fs/cgroup/systemd: Operation not permitted</code> on a Linux machine
+
+This is if only cGroup v2 is allowed.
+To switch to a hybrid mode allowing cGroup v1 and v2 add the following Kernel parameter:
+
+<code>
+systemd.unified_cgroup_hierarchy=false
 </code>
