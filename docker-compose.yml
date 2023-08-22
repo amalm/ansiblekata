@@ -6,19 +6,19 @@ services:
       - seccomp:unconfined
     volumes:
       - type: bind
-        source: etc/ansible
+        source: ./etc/ansible
         target: /etc/ansible
       - type: bind
-        source: .ssh
+        source: ./.ssh
         target: /home/ansible/.ssh
       - type: bind
-        source: .ansible.cfg
+        source: ./ansibles/ansible.cfg
         target: /home/ansible/.ansible.cfg
       - type: bind
-        source: ansibles
+        source: ./ansibles
         target: /home/ansible/ansibles
     ports:
-      - 2222:22
+      - "2222:22"
       
     links:
       - katabox
@@ -32,9 +32,9 @@ services:
       - seccomp:unconfined
     volumes:
       - type: bind
-        source: .ssh
+        source: ./.ssh
         target: /home/ansible/.ssh
     ports:
-      - 3000:3000
+      - "3000:3000"
     stdin_open: true 
     tty: true      

@@ -53,6 +53,8 @@ You should see something like this:
 </code>
 
 ### Ping all nodes
+<code>cd ansibles</code>
+
 <code>ansible all -m ping</code>
 <code>
 katabox | SUCCESS => {
